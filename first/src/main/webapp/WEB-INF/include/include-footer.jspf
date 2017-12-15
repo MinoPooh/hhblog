@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<div id="Bottom" >
+	<div class="Contatiner">
+		<div id="bnb">
+			<ul id="snsurl" align="right">
+				<li><a href="https://www.instagram.com/some_no9"
+					style="color: white"> <span>인스타그램</span>
+				</a></li>
+				<li><a
+					href="https://www.facebook.com/profile.php?id=100003457763894"
+					style="color: white"> <span>페이스북</span>
+				</a></li>
+			</ul>
+		</div>
+
+		<div class="Copyright">"COPYRIGHT 2017 MinHO's Board 기타 문의 사항은"
+			"minho3272@gmail.com"</div>
+	</div>
+</div>
+
+<style>
+/* #Bottom {
+	background-color: black;
+} */
+
+.Contatiner {
+	background-color: black;
+	width: 1800px;
+	margin: 0 auto;
+	
+}
+
+#bnb {
+	color: white;
+}
+
+#snsurl {
+	list-style: none;
+	color: white;
+}
+
+.Copyright {
+	color: white;
+}
+</style>
