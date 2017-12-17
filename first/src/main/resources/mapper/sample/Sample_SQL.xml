@@ -11,17 +11,16 @@
 	            IDX,
 	            TITLE,
 	            CREA_ID,
-	            HIT_CNT,
 	            CREA_DTM
 	        FROM
-	            TB_BOARD
+	            TB_BLOG_BOARD
 	        WHERE
 	            DEL_GB = 'N'
 	    ]]>
 		<include refid="common.pagingPost" />
 	</select>
 
-	<select id="selectCodeBoardList" parameterType="hashmap" resultType="hashmap">
+<!-- 	<select id="selectCodeBoardList" parameterType="hashmap" resultType="hashmap">
 		<include refid="common.pagingPre" />
 	    <![CDATA[
 	        SELECT
@@ -35,7 +34,6 @@
 	        FROM
 	            TB_BOARD
 	        WHERE
-	        	
 	            DEL_GB = 'N' AND BOARD_CODE = #{BOARD_CODE}
 	    ]]>
 		<include refid="common.pagingPost" />
@@ -88,13 +86,12 @@
 		<![CDATA[
 			SELECT
 				IDX,
-				HIT_CNT,
 				CREA_ID,
 				CREA_DTM,
 				TITLE,
 				CONTENTS
 			FROM
-				TB_BOARD
+				TB_BLOG_BOARD
 			WHERE
 				IDX = #{IDX}		
 		]]>
@@ -176,7 +173,7 @@
 	    ]]>
 	</update>
 
-	<!-- 17.11.30 회원 관리 -->
+	17.11.30 회원 관리
 	<insert id="insertJoin" parameterType="hashmap">
 		<![CDATA[
 			
@@ -218,7 +215,7 @@
 			WHERE USERID = #{InputEmail} AND PWD = #{password}
 	
 			]]>
-	</select>
+	</select> -->
 </mapper>
 
 

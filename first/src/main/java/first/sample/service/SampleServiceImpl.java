@@ -47,13 +47,13 @@ public class SampleServiceImpl implements SampleService {
 
 	@Override
 	public Map<String, Object> selectBoardDetail(Map<String, Object> map) throws Exception {
-		sampleDAO.updateHitCnt(map);
+		/*sampleDAO.updateHitCnt(map);*/
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		Map<String, Object> tempMap = sampleDAO.selectBoardDetail(map);
 		resultMap.put("map", tempMap);
 
-		List<Map<String, Object>> list = sampleDAO.selectFileList(map);
-		resultMap.put("list", list);
+		/*List<Map<String, Object>> list = sampleDAO.selectFileList(map);
+		resultMap.put("list", list);*/
 
 		return resultMap;
 	}
