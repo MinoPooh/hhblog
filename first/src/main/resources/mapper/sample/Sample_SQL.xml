@@ -19,6 +19,22 @@
 	    ]]>
 		<include refid="common.pagingPost" />
 	</select>
+	
+	<select id="selectBoardDetail" parameterType="hashmap"
+		resultType="hashmap">
+		<![CDATA[
+			SELECT
+				IDX,
+				CREA_ID,
+				CREA_DTM,
+				TITLE,
+				CONTENTS
+			FROM
+				TB_BLOG_BOARD
+			WHERE
+				IDX = #{IDX}		
+		]]>
+	</select>
 
 <!-- 	<select id="selectCodeBoardList" parameterType="hashmap" resultType="hashmap">
 		<include refid="common.pagingPre" />

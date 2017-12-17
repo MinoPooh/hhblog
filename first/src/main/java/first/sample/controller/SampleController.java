@@ -52,6 +52,13 @@ public class SampleController {
 		ModelAndView mv = new ModelAndView("/blog/about");
 		return mv;
 	}
+	
+	 @RequestMapping(value = "/sample/openlogin.do") public ModelAndView
+	 openLoin(CommandMap commandMap) throws Exception { 
+		 ModelAndView mv = new ModelAndView("/blog/login");
+	 
+		 return mv; 
+	 }
 
 	/*
 	 * @RequestMapping(value = "/sample/openBoardWrite.do") public ModelAndView
