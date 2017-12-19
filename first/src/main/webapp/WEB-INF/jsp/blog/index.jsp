@@ -1,13 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
 
@@ -18,33 +14,21 @@
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 
 <!-- jQuery -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
 
-
 <!-- Bootstrap core CSS -->
-<link href="../resources/vendor_blog/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
-
+<link href="../resources/vendor_blog/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom fonts for this template -->
-<link
-	href="../resources/vendor_blog/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
-<link
-	href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic'
-	rel='stylesheet' type='text/css'>
-<link
-	href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
-	rel='stylesheet' type='text/css'>
-
+<link href="../resources/vendor_blog/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 <!-- Custom styles for this template -->
 <link href="../resources/css_blog/clean-blog.min.css" rel="stylesheet">
 
 </head>
 
 <body>
-
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-light fixed-top"
 		id="mainNav">
@@ -63,10 +47,25 @@
 						href="../sample/openIndex.do">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="openAbout.do">About</a>
 					</li>
-					<!-- <li class="nav-item"><a id= "post" class="nav-link" href="../sample/openPost.do">Post</a> -->
+					<!-- <li class="nav-item"><a id= "post" class="nav-link" href="openLogin.do">Login</a></li>
+					<li class="nav-item"><a class="nav-link" href="openJoin.do">Sign Up</a></li> -->
+					<!--<li class="nav-item"><a id= "post" class="nav-link" href="../sample/openPost.do">Post</a>
 					</li>
-					<!-- <li class="nav-item"><a class="nav-link" href="openContact.do">Contact</a> -->
-					</li>
+						<li class="nav-item"><a class="nav-link" href="openContact.do">Contact</a>
+					</li> -->
+			
+					<c:choose>
+						<c:when test="${sessionScope.userId == null}">
+							<li class="nav-item"><a id= "post" class="nav-link" href="openLogin.do">Login</a></li>
+							<li class="nav-item"><a class="nav-link" href="openJoin.do">Sign Up</a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="nav-item"><a id= "post" class="nav-link" href="">${sessionScope.userName}님 환영합니다.</a></li>
+							<li class="nav-item"><a class="nav-link" href="logout.do">Logout</a></li>
+							<%--<li><a style="color: white">${sessionScope.userName}님환영합니다.</a></li>
+							<li><a href="logout.do" style="color: white">로그아웃</a></li>--%>
+						</c:otherwise>
+					</c:choose>
 				</ul>
 			</div>
 		</div>
@@ -99,8 +98,9 @@
 								<a name="title" href="#this">
 									<h2 class="post-title">${row.TITLE}</h2>
 								</a>
-								<p class="post-meta">
-									Posted by <a href="#">${row.CREA_ID}</a> on ${row.CREA_DTM}
+								<p class="post-meta">Posted by 
+									<a href="#">${row.CREA_ID}</a> 
+									on ${row.CREA_DTM}
 								</p>
 								<input type="hidden" id="IDX" value="${row.IDX}">
 							</div>
@@ -118,11 +118,19 @@
 				</c:choose>
 
 				<!-- Pager -->
-				<div class="clearfix" aling="aling" >
-					<!-- <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a> -->
+				<div class="clearfix" align="center" >
+					<%--<c:if test="${sessionScope.userId != null}">
+						<a class="btn btn-primary float-right" href="#this" id="write">Write Post</a>
+					</c:if>--%>
 					<c:if test="${not empty paginationInfo}">
 						<ui:pagination paginationInfo="${paginationInfo}" type="text"
 							jsFunction="fn_search" />
+					</c:if>
+				</div>
+				
+				<div align="right">
+					<c:if test="${sessionScope.userId != null}">
+						<a class="btn btn-primary float-right" href="#this" id="write">Write Post</a>
 					</c:if>
 				</div>
 			</div>
@@ -164,12 +172,9 @@
 	<%@ include file="/WEB-INF/include/include-body.jspf"%>
 	<!-- Bootstrap core JavaScript -->
 	<script src="../resources/vendor_blog/jquery/jquery.min.js"></script>
-	<script
-		src="../resources/vendor_blog/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+	<script src="../resources/vendor_blog/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- Custom scripts for this template -->
 	<script src="../resources/js_blog/clean-blog.min.js"></script>
-
 
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -182,6 +187,11 @@
 			$("a[name='post']").on("click", function(e) { //post 메뉴 클릭
 				e.preventDefault();
 				fn_openPost($(this));
+			});
+			
+			$("#write").on("click", function(e) { //글쓰기 버튼
+				e.preventDefault();
+				fn_openWrite();
 			});
 		});
 
@@ -198,6 +208,13 @@
 			comSubmit.addParam("currentPageNo", pageNo);
 			comSubmit.submit();
 		}
+		
+		function fn_openWrite() {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/openWrite.do' />");
+			comSubmit.submit();
+		}
+
 	</script>
 
 

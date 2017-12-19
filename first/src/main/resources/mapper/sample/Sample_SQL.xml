@@ -35,6 +35,99 @@
 				IDX = #{IDX}		
 		]]>
 	</select>
+	
+	<select id="loginCheck" resultType="String">
+		<![CDATA[
+		
+			SELECT NAME
+			FROM TB_MEMBER
+			WHERE USERID =  #{InputEmail} AND PWD = #{password}
+		
+		]]>
+	</select>
+	
+	<select id="viewMember" resultType="first.sample.vo.MemberVO">
+		<![CDATA[
+		
+			SELECT
+			NAME as userName,
+			USERID as InputEmail
+			FROM TB_MEMBER
+			WHERE USERID = #{InputEmail} AND PWD = #{password}
+	
+			]]>
+	</select>
+	
+	<insert id="insertJoin" parameterType="hashmap">
+		<![CDATA[
+			INSERT INTO TB_MEMBER
+			(
+				NAME,
+			    USERID, 
+			    PWD, 
+			    PHONE
+			)
+			VALUES
+			(
+			
+				#{username}, 
+			    #{InputEmail}, 
+			    #{InputPassword1},
+			    #{userphone} 
+			)
+		]]>
+	</insert>
+
+	<insert id="insertBoard" parameterType="hashmap"
+		useGeneratedKeys="true" keyProperty="IDX">
+		<selectKey keyProperty="IDX" resultType="string" order="BEFORE">
+			SELECT SEQ_TB_BOARD_IDX.NEXTVAL FROM DUAL
+		</selectKey>
+		<![CDATA[
+			
+			INSERT INTO TB_BLOG_BOARD
+			(
+				IDX,
+			    TITLE, 
+			    CONTENTS, 
+			    DEL_GB, 
+			    CREA_DTM, 
+			    CREA_ID
+			)
+			VALUES
+			(
+				#{IDX}, 
+			    #{TITLE}, 
+			    #{content}, 
+			    'N', 
+			    SYSDATE, 
+			   #{CREA_ID}
+			)
+		]]>
+	</insert>
+
+	<update id="deleteBoard" parameterType="hashmap">
+		<![CDATA[
+			UPDATE TB_BLOG_BOARD
+			SET
+				DEL_GB = 'Y'
+			WHERE
+				IDX = #{IDX}
+		]]>
+	</update>
+
+
+	<update id="updateBoard" parameterType="hashmap">
+		<![CDATA[
+			UPDATE TB_BLOG_BOARD 
+			SET
+				TITLE = #{TITLE},
+				CONTENTS = #{content}
+			WHERE
+				IDX = #{IDX}	
+		]]>
+	</update>
+	
 
 <!-- 	<select id="selectCodeBoardList" parameterType="hashmap" resultType="hashmap">
 		<include refid="common.pagingPre" />
@@ -188,50 +281,7 @@
 	            IDX = #{FILE_IDX}  
 	    ]]>
 	</update>
-
-	17.11.30 회원 관리
-	<insert id="insertJoin" parameterType="hashmap">
-		<![CDATA[
-			
-			INSERT INTO TB_MEMBER
-			(
-				NAME,
-			    USERID, 
-			    PWD, 
-			    PHONE
-			)
-			VALUES
-			(
-			
-				#{username}, 
-			    #{InputEmail}, 
-			    #{InputPassword1},
-			    #{userphone} 
-			)
-		]]>
-	</insert>
-
-	<select id="loginCheck" resultType="String">
-		<![CDATA[
-		
-			SELECT NAME
-			FROM TB_MEMBER
-			WHERE USERID =  #{InputEmail} AND PWD = #{password}
-		
-		]]>
-	</select>
-
-	<select id="viewMember" resultType="first.sample.vo.MemberVO">
-		<![CDATA[
-		
-			SELECT
-			NAME as userName,
-			USERID as InputEmail
-			FROM TB_MEMBER
-			WHERE USERID = #{InputEmail} AND PWD = #{password}
-	
-			]]>
-	</select> -->
+-->
 </mapper>
 
 

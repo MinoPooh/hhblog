@@ -24,21 +24,19 @@ public class SampleController {
 	@Resource(name = "sampleService")
 	private SampleService sampleService;
 
-	public String URL;
-	public String BOARD_NAME;
-
-	//메인 리스트 화면 index
+	// 메인 리스트 화면 index
 	@RequestMapping(value = "/sample/openIndex.do")
-	public ModelAndView openBoardList(CommandMap commandMap) throws Exception {
+	public ModelAndView openIndex(CommandMap commandMap) throws Exception {
 		ModelAndView mv = new ModelAndView("/blog/index");
 		Map<String, Object> resultMap = sampleService.selectBoardList(commandMap.getMap());
 		mv.addObject("paginationInfo", (PaginationInfo) resultMap.get("paginationInfo"));
 		mv.addObject("list", resultMap.get("result"));
 		return mv;
 	}
-	//상세 보기 post
+
+	// 상세 보기 post
 	@RequestMapping(value = "/sample/openPost.do")
-	public ModelAndView openBoardDetail(CommandMap commandMap, HttpServletRequest request) throws Exception {
+	public ModelAndView openPost(CommandMap commandMap, HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("/blog/post");
 		Map<String, Object> map = sampleService.selectBoardDetail(commandMap.getMap());
 		mv.addObject("map", map.get("map"));
@@ -46,19 +44,107 @@ public class SampleController {
 
 		return mv;
 	}
-	
+
 	@RequestMapping(value = "/sample/openAbout.do")
 	public ModelAndView openAbout(CommandMap commandMap, HttpServletRequest request) throws Exception {
 		ModelAndView mv = new ModelAndView("/blog/about");
+		
+		return mv;
+	}
+
+	@RequestMapping(value = "/sample/openJoin.do")
+	public ModelAndView openJoin(CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("/blog/join");
+		
 		return mv;
 	}
 	
-	 @RequestMapping(value = "/sample/openlogin.do") public ModelAndView
-	 openLoin(CommandMap commandMap) throws Exception { 
-		 ModelAndView mv = new ModelAndView("/blog/login");
+	 @RequestMapping(value = "/sample/insertJoin.do") 
+	 public ModelAndView insertJoin(CommandMap commandMap, HttpServletRequest request) throws Exception { 
+		 ModelAndView mv = new ModelAndView("redirect:/sample/openLogin.do");
+		 sampleService.insertJoin(commandMap.getMap(), request);
 	 
-		 return mv; 
+	 return mv; 
+	 
 	 }
+
+	@RequestMapping(value = "/sample/openLogin.do")
+	public ModelAndView openLogin(CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("/blog/login");
+		
+		return mv;
+	}
+
+	@RequestMapping(value = "/sample/loginCheck.do")
+	public ModelAndView loginCheck(@ModelAttribute MemberVO vo, HttpSession session) throws Exception {
+		boolean result = sampleService.loginCheck(vo, session);
+
+		ModelAndView mv = new ModelAndView();
+		if (result == true) { // 로그인 성공
+			mv.setViewName("redirect:/sample/openIndex.do");
+			mv.addObject("msg", "success");
+		} else { // 로그인 실패
+			mv.setViewName("/blog/login");
+			mv.addObject("msg", "failure");
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "sample/logout.do")
+	public ModelAndView logout(HttpSession session) throws Exception {
+
+		System.out.println("로그아웃");
+		sampleService.logout(session);
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("redirect:/sample/openIndex.do");
+		mv.addObject("msg", "logout");
+		return mv;
+	}
+
+	  @RequestMapping(value = "/sample/openWrite.do") 
+	  public ModelAndView openWrite(CommandMap commandMap, HttpServletRequest request) throws Exception { 
+	  ModelAndView mv = new ModelAndView("/blog/write");
+	  
+	  return mv; 
+	}
+	  
+	@RequestMapping(value = "/sample/insertWrite.do") //입력
+	public ModelAndView insertWrite(CommandMap commandMap, HttpServletRequest request) throws Exception {
+		ModelAndView mv = new ModelAndView("redirect:/sample/openIndex.do");
+		
+		sampleService.insertBoard(commandMap.getMap(), request);
+
+		return mv;
+	}
+	  
+	  @RequestMapping(value = "/sample/openEdit.do") 
+	  public ModelAndView openEdit(CommandMap commandMap, HttpServletRequest request) throws Exception { 
+	  ModelAndView mv = new ModelAndView("/blog/edit");
+	  
+	  Map<String, Object> map = sampleService.selectBoardDetail(commandMap.getMap());
+	  mv.addObject("map",map.get("map")); mv.addObject("list", map.get("list"));
+	  
+	  return mv; 
+	}
+
+	  @RequestMapping(value = "/sample/updateEdit.do") //수정
+	public ModelAndView updateEdit(CommandMap commandMap, HttpServletRequest request) throws Exception {
+
+		ModelAndView mv = new ModelAndView("redirect:/sample/openIndex.do");
+
+		sampleService.updateBoard(commandMap.getMap(), request);
+
+		mv.addObject("IDX", commandMap.get("IDX"));
+		return mv;
+	}
+
+	@RequestMapping(value = "/sample/delete.do") //삭제
+	public ModelAndView delete(CommandMap commandMap) throws Exception {
+		ModelAndView mv = new ModelAndView("redirect:/sample/openIndex.do");
+
+		sampleService.deleteBoard(commandMap.getMap());
+		return mv;
+	}
 
 	/*
 	 * @RequestMapping(value = "/sample/openBoardWrite.do") public ModelAndView

@@ -1,33 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="kr">
 <head>
-
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
 
 <title>Clean Blog - Start Bootstrap Theme</title>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="<c:url value='/js/common.js'/>" charset="utf-8"></script>
 <!-- Bootstrap core CSS -->
-<link href="../resources/vendor_blog/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
-
+<link href="../resources/vendor_blog/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <!-- Custom fonts for this template -->
-<link
-	href="../resources/vendor_blog/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
-<link
-	href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic'
-	rel='stylesheet' type='text/css'>
-<link
-	href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
-	rel='stylesheet' type='text/css'>
-
+<link href="../resources/vendor_blog/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 <!-- Custom styles for this template -->
 <link href="../resources/css_blog/clean-blog.min.css" rel="stylesheet">
 
@@ -53,10 +46,27 @@
 						href="../sample/openIndex.do">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="openAbout.do">About</a>
 					</li>
-					<!-- <li class="nav-item"><a id= "post" class="nav-link" href="../sample/openPost.do">Post</a> -->
+					<!-- <li class="nav-item"><a id= "post" class="nav-link" href="openLogin.do">Login</a></li>
+					<li class="nav-item"><a class="nav-link" href="openJoin.do">Sign Up</a></li> -->
+					<!--<li class="nav-item"><a id= "post" class="nav-link" href="../sample/openPost.do">Post</a>
 					</li>
-					<!-- <li class="nav-item"><a class="nav-link" href="openContact.do">Contact</a> -->
-					</li>
+						<li class="nav-item"><a class="nav-link" href="openContact.do">Contact</a>
+					</li> -->
+
+					<c:choose>
+						<c:when test="${sessionScope.userId == null}">
+							<li class="nav-item"><a id="post" class="nav-link"
+								href="openLogin.do">Login</a></li>
+							<li class="nav-item"><a class="nav-link" href="openJoin.do">Sign
+									Up</a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="nav-item"><a id="post" class="nav-link">${sessionScope.userName}님 환영합니다.</a></li>
+							<li class="nav-item"><a class="nav-link" href="logout.do">Logout</a></li>
+							<%--<li><a style="color: white">${sessionScope.userName}님환영합니다.</a></li>
+							<li><a href="logout.do" style="color: white">로그아웃</a></li>--%>
+						</c:otherwise>
+					</c:choose>
 				</ul>
 			</div>
 		</div>
@@ -85,9 +95,18 @@
 	<article>
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-8 col-md-10 mx-auto">${map.CONTENTS }</div>
+				<div class="col-lg-8 col-md-10 mx-auto">
+				${map.CONTENTS }
+				</div>
+			</div>
+			<div class="pull-right">
+				<c:if test="${sessionScope.userId == map.CREA_ID}">
+					<button id="edit" type="button" class="btn btn-warning">Edit</button>
+					<button id="delete" type="button" class="btn btn-danger">Delete</button>
+				</c:if>
 			</div>
 		</div>
+		<input type="hidden" id="IDX" name="IDX" value="${map.IDX }">
 	</article>
 	<hr>
 
@@ -122,14 +141,42 @@
 			</div>
 		</div>
 	</footer>
-
+	
+	<%@ include file="/WEB-INF/include/include-body.jspf"%>
 	<!-- Bootstrap core JavaScript -->
 	<script src="../resources/vendor_blog/jquery/jquery.min.js"></script>
-	<script
-		src="../resources/vendor_blog/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+	<script src="../resources/vendor_blog/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- Custom scripts for this template -->
 	<script src="../resources/js_blog/clean-blog.min.js"></script>
+	
+	<script type="text/javascript">
+		$("#edit").on("click", function(e) { //수정 버튼
+			e.preventDefault();
+			fn_edit();
+		});
+
+		$("#delete").on("click", function(e) { //삭제하기 버튼
+			e.preventDefault();
+			if (!confirm('삭제?')) {
+				return false;
+			}
+			fn_delete();
+		});
+
+		function fn_delete() {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/delete.do' />");
+			comSubmit.addParam("IDX", $("#IDX").val());
+			comSubmit.submit();
+		}
+		
+		function fn_edit() {
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/sample/openEdit.do' />");
+			comSubmit.addParam("IDX", $("#IDX").val());
+			comSubmit.submit();
+		}
+	</script>
 
 </body>
 

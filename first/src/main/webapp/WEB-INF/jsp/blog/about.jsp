@@ -1,6 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
 
 <meta charset="utf-8">
@@ -10,6 +11,10 @@
 <meta name="author" content="">
 
 <title>Clean Blog - Start Bootstrap Theme</title>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 
 <!-- Bootstrap core CSS -->
 <link href="../resources/vendor_blog/bootstrap/css/bootstrap.min.css"
@@ -32,12 +37,12 @@
 </head>
 
 <body>
-
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-light fixed-top"
 		id="mainNav">
 		<div class="container">
-			<a class="navbar-brand" href="../sample/openIndex.do">Start Bootstrap</a>
+			<a class="navbar-brand" href="../sample/openIndex.do">Start
+				Bootstrap</a>
 			<button class="navbar-toggler navbar-toggler-right" type="button"
 				data-toggle="collapse" data-target="#navbarResponsive"
 				aria-controls="navbarResponsive" aria-expanded="false"
@@ -50,14 +55,30 @@
 						href="../sample/openIndex.do">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="openAbout.do">About</a>
 					</li>
-					<!-- <li class="nav-item"><a id= "post" class="nav-link" href="../sample/openPost.do">Post</a> -->
+					<!-- <li class="nav-item"><a id= "post" class="nav-link" href="openLogin.do">Login</a></li>
+					<li class="nav-item"><a class="nav-link" href="openJoin.do">Sign Up</a></li> -->
+					<!--<li class="nav-item"><a id= "post" class="nav-link" href="../sample/openPost.do">Post</a>
 					</li>
-					<!-- <li class="nav-item"><a class="nav-link" href="openContact.do">Contact</a> -->
-					</li>
+						<li class="nav-item"><a class="nav-link" href="openContact.do">Contact</a>
+					</li> -->
+			
+					<c:choose>
+						<c:when test="${sessionScope.userId == null}">
+							<li class="nav-item"><a id= "post" class="nav-link" href="openLogin.do">Login</a></li>
+							<li class="nav-item"><a class="nav-link" href="openJoin.do">Sign Up</a></li>
+						</c:when>
+						<c:otherwise>
+							<li class="nav-item"><a id= "post" class="nav-link" href="">${sessionScope.userName}님 환영합니다.</a></li>
+							<li class="nav-item"><a class="nav-link" href="logout.do">Logout</a></li>
+							<%--<li><a style="color: white">${sessionScope.userName}님환영합니다.</a></li>
+							<li><a href="logout.do" style="color: white">로그아웃</a></li>--%>
+						</c:otherwise>
+					</c:choose>
 				</ul>
 			</div>
 		</div>
 	</nav>
+
 
 	<!-- Page Header -->
 	<header class="masthead"
@@ -67,8 +88,8 @@
 			<div class="row">
 				<div class="col-lg-8 col-md-10 mx-auto">
 					<div class="page-heading">
-						<h1>About Me</h1>
-						<span class="subheading">This is what I do.</span>
+						<h1>About We</h1>
+						<span class="subheading">This is what We do.</span>
 					</div>
 				</div>
 			</div>
